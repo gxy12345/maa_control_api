@@ -4,8 +4,25 @@
 # @File    : redis.py
 # @Software: PyCharm
 import aioredis
+import yaml
 
-redis = aioredis.from_url("redis://localhost")
+with open('config/config.yaml') as f:
+    config = yaml.load(f, yaml.FullLoader)
+
+if not config.get('redis'):
+    host = config['redis'].get('host', 'localhost')
+    port = config['redis'].get('port', 6379)
+    password = config['redis'].get('password')
+else:
+    host = 'localhost'
+    port = 6379
+    password = None
+
+
+if password:
+    redis = aioredis.from_url(f"redis://{password}@{host}:{port}")
+else:
+    redis = aioredis.from_url(f"redis://{host}:{port}")
 
 
 async def get(key):

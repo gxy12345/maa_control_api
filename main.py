@@ -52,4 +52,12 @@ async def set_task(item: SetTaskReqItem):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8088)
+    import yaml
+
+    with open('config/config.yaml') as f:
+        config = yaml.load(f, yaml.FullLoader)
+
+    host = config['api'].get('host', '0.0.0.0')
+    port = config['api'].get('port', 8088)
+
+    uvicorn.run(app, host=host, port=port)
