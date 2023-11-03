@@ -49,7 +49,6 @@ async def set_task(item: SetTaskReqItem):
     return {"tasks": task_list}
 
 
-
 if __name__ == "__main__":
     import uvicorn
     import yaml

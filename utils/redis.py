@@ -9,7 +9,7 @@ import yaml
 with open('config/config.yaml') as f:
     config = yaml.load(f, yaml.FullLoader)
 
-if not config.get('redis'):
+if config.get('redis'):
     host = config['redis'].get('host', 'localhost')
     port = config['redis'].get('port', 6379)
     password = config['redis'].get('password')
