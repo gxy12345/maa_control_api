@@ -54,6 +54,9 @@ if __name__ == "__main__":
     import uvicorn
     import yaml
 
+    print("MAA Control API Server V0.1")
+    print("By Windoge")
+
     with open('config/config.yaml') as f:
         config = yaml.load(f, yaml.FullLoader)
 
