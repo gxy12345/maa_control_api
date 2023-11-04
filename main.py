@@ -9,8 +9,8 @@ import logging
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from maa.model import GetTaskReqItem, SetTaskReqItem
-from maa.get_task import create_user, get_tasks, set_tasks
+from maa.model import GetTaskReqItem, SetTaskReqItem, ReportTaskReqItem
+from maa.get_task import create_user, get_tasks, set_tasks, report_task_item
 from maa.constant import USER_KEY_PREFIX
 from utils import redis
 
@@ -47,6 +47,16 @@ async def set_task(item: SetTaskReqItem):
         task_list = await set_tasks(item)
 
     return {"tasks": task_list}
+
+
+@app.post("/maa/report_task")
+async def report_task(item: ReportTaskReqItem):
+    user = await redis.get(f'{USER_KEY_PREFIX}{item.user}')
+    print(user)
+    if not user:
+        return JSONResponse({"err_msg": "cannot find user"}, status_code=400)
+    else:
+        await report_task_item(item)
 
 
 if __name__ == "__main__":

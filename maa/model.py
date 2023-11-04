@@ -16,3 +16,11 @@ class SetTaskReqItem(BaseModel):
     user: str
     device: str
     tasks: list
+
+
+class ReportTaskReqItem(BaseModel):
+    user: str
+    device: str
+    task: str
+    status: str
+    payload: Optional[str] = ""

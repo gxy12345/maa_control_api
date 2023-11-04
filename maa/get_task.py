@@ -8,7 +8,7 @@ import json
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from maa.model import GetTaskReqItem, SetTaskReqItem
+from maa.model import GetTaskReqItem, SetTaskReqItem, ReportTaskReqItem
 from maa.constant import USER_KEY_PREFIX, TASK_KEY_PREFIX, TASK_TYPE_ENUM
 from utils import redis
 
@@ -40,8 +40,23 @@ async def set_tasks(item: SetTaskReqItem):
             continue
         task_item = {
             "id": str(uuid.uuid1()),
-            "type": task_type
+            "type": task_type,
+            "status": "PENDING",
+            "result": None
         }
         task_list.append(task_item)
-    await redis.set(f'{TASK_KEY_PREFIX}{item.user}:{item.device}', json.dumps(task_list))
+    await redis.set(f'{TASK_KEY_PREFIX}{item.user}:{item.device}', json.dumps(task_list), 60*60*12)
     return task_list
+
+
+async def report_task_item(item: ReportTaskReqItem):
+    task_list = await redis.get(f'{TASK_KEY_PREFIX}{item.user}:{item.device}')
+    if not task_list:
+        return JSONResponse({"err_msg": "cannot find task"}, status_code=400)
+    for task_item in task_list:
+        if task_item['id'] == item.task:
+            task_item['status'] = item.status
+            task_item['result'] = item.payload
+    return JSONResponse({"msg": "OK"})
+
+
