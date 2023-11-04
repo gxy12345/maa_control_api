@@ -45,7 +45,7 @@ async def set_tasks(item: SetTaskReqItem):
             "result": None
         }
         task_list.append(task_item)
-    await redis.set(f'{TASK_KEY_PREFIX}{item.user}:{item.device}', json.dumps(task_list), 60*60*12)
+    await redis.set(f'{TASK_KEY_PREFIX}{item.user}:{item.device}', json.dumps(task_list), 60*60*4)
     return task_list
 
 
@@ -57,6 +57,7 @@ async def report_task_item(item: ReportTaskReqItem):
         if task_item['id'] == item.task:
             task_item['status'] = item.status
             task_item['result'] = item.payload
+    await redis.set(f'{TASK_KEY_PREFIX}{item.user}:{item.device}', json.dumps(task_list), 60*60*4)
     return JSONResponse({"msg": "OK"})
 
 
