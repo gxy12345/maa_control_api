@@ -6,7 +6,7 @@
 import uuid
 import json
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from maa.model import GetTaskReqItem, SetTaskReqItem, ReportTaskReqItem
@@ -35,6 +35,18 @@ async def get_task(item: GetTaskReqItem):
         user_info['tasks'] = await get_tasks(item)
 
     return user_info
+
+
+@app.get("/maa/check_user")
+async def get_task(user: str = Query(None), device: str = Query(None)):
+    user_str = await redis.get(f'{USER_KEY_PREFIX}{user}')
+    if not user_str:
+        return {"result": False}
+    else:
+        user_info = json.loads(user_str)
+        if not user_info['device'] == device:
+            return {"result": False}
+    return {"result": True}
 
 
 @app.post("/maa/set_task")
