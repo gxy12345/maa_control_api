@@ -4,6 +4,7 @@ redis:
   password:
 ssl:
   cert_path: ssl/cert.pem
+  key_path: ssl/key.pem
 api:
   host: 0.0.0.0
   port: 8098

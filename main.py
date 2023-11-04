@@ -62,6 +62,7 @@ async def report_task(item: ReportTaskReqItem):
 if __name__ == "__main__":
     import uvicorn
     import yaml
+    import os
 
     print("MAA Control API Server V0.1")
     print("By Windoge")
@@ -71,5 +72,10 @@ if __name__ == "__main__":
 
     host = config['api'].get('host', '0.0.0.0')
     port = config['api'].get('port', 8088)
+    cert_path = config['ssl'].get('cert_path')
+    key_path = config['ssl'].get('key_path')
 
-    uvicorn.run(app, host=host, port=port)
+    if cert_path and key_path and os.path.exists(cert_path) and os.path.exists(key_path):
+        uvicorn.run(app, host=host, port=port, ssl_keyfile=key_path, ssl_certfile=cert_path)
+    else:
+        uvicorn.run(app, host=host, port=port)
