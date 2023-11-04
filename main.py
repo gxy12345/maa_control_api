@@ -38,7 +38,9 @@ async def get_task(item: GetTaskReqItem):
 
 
 @app.get("/maa/check_user")
-async def get_task(user: str = Query(None), device: str = Query(None)):
+async def get_task(user: str, device: str):
+    print(user)
+    print(device)
     user_str = await redis.get(f'{USER_KEY_PREFIX}{user}')
     if not user_str:
         return {"result": False}
