@@ -10,7 +10,7 @@ from fastapi import FastAPI, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from maa.model import GetTaskReqItem, SetTaskReqItem, ReportTaskReqItem
-from maa.get_task import create_user, get_tasks, set_tasks, report_task_item
+from maa.get_task import create_user, get_tasks, set_tasks, report_task_item, update_user
 from maa.constant import USER_KEY_PREFIX
 from utils import redis
 
@@ -31,8 +31,10 @@ async def get_task(item: GetTaskReqItem):
         return user_info
     else:
         user_info = json.loads(user)
-        user_info['device'] = item.device
         user_info['tasks'] = await get_tasks(item)
+        if user_info['device'] != item.device:
+            user_info['device'] = item.device
+            await update_user(item.user, user_info)
 
     return user_info
 

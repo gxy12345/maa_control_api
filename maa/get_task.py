@@ -24,6 +24,12 @@ async def create_user(item: GetTaskReqItem):
     return user_info
 
 
+async def update_user(user, user_info):
+    print("update user info")
+    await redis.set(f'{USER_KEY_PREFIX}{user}', json.dumps(user_info))
+    return user_info
+
+
 async def get_tasks(item: GetTaskReqItem):
     print("get existed task")
     task_info = await redis.get(f'{TASK_KEY_PREFIX}{item.user}:{item.device}')
