@@ -50,9 +50,10 @@ async def set_tasks(item: SetTaskReqItem):
 
 
 async def report_task_item(item: ReportTaskReqItem):
-    task_list = await redis.get(f'{TASK_KEY_PREFIX}{item.user}:{item.device}')
-    if not task_list:
+    task_list_str = await redis.get(f'{TASK_KEY_PREFIX}{item.user}:{item.device}')
+    if not task_list_str:
         return JSONResponse({"err_msg": "cannot find task"}, status_code=400)
+    task_list = json.loads(task_list_str)
     for task_item in task_list:
         if task_item['id'] == item.task:
             task_item['status'] = item.status
