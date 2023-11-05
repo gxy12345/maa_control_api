@@ -53,6 +53,16 @@ async def get_task(user: str, device: str):
     return {"result": True}
 
 
+@app.get("/maa/get_device")
+async def get_task(user: str):
+    user_str = await redis.get(f'{USER_KEY_PREFIX}{user}')
+    if not user_str:
+        return {"device": None}
+    else:
+        user_info = json.loads(user_str)
+        return {"result": user_info.get('device')}
+
+
 @app.post("/maa/set_task")
 async def set_task(item: SetTaskReqItem):
     user = await redis.get(f'{USER_KEY_PREFIX}{item.user}')
