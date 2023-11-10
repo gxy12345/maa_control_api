@@ -24,3 +24,8 @@ TASK_TYPE_ENUM = [
     "StopTask",
     "HeartBeat",
 ]
+
+SETTING_ENUM = [
+    "LinkStart-Mission",
+    "LinkStart-ReclamationAlgorithm",
+]

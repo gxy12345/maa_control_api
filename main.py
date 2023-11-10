@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2023/11/3 14:27
 # @Author  : windoge
-# @File    : get_task.py
+# @File    : task_service.py
 # @Software: PyCharm
 import uuid
 import json
@@ -10,7 +10,7 @@ from fastapi import FastAPI, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from maa.model import GetTaskReqItem, SetTaskReqItem, ReportTaskReqItem
-from maa.get_task import create_user, get_tasks, set_tasks, report_task_item, update_user
+from maa.task_service import create_user, get_tasks, set_tasks, report_task_item, update_user
 from maa.constant import USER_KEY_PREFIX
 from utils import redis
 

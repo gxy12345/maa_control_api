@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2023/11/3 14:27
 # @Author  : windoge
-# @File    : get_task.py
+# @File    : task_service.py
 # @Software: PyCharm
 import uuid
 import json
@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from maa.model import GetTaskReqItem, SetTaskReqItem, ReportTaskReqItem
-from maa.constant import USER_KEY_PREFIX, TASK_KEY_PREFIX, TASK_TYPE_ENUM
+from maa.constant import USER_KEY_PREFIX, TASK_KEY_PREFIX, TASK_TYPE_ENUM, SETTING_ENUM
 from utils import redis
 
 
@@ -50,6 +50,9 @@ async def set_tasks(item: SetTaskReqItem):
             "status": "PENDING",
             "result": None
         }
+        task_params = task.get('params')
+        if task_params and task_type in SETTING_ENUM:
+            task_item['params'] = str(task_params)
         task_list.append(task_item)
     await redis.set(f'{TASK_KEY_PREFIX}{item.user}:{item.device}', json.dumps(task_list), 60*60*4)
     return task_list
