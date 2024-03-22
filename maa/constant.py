@@ -26,6 +26,6 @@ TASK_TYPE_ENUM = [
 ]
 
 SETTING_ENUM = [
-    "LinkStart-Mission",
-    "LinkStart-ReclamationAlgorithm",
+    "Settings-ConnectionAddress",
+    "Settings-Stage1",
 ]
