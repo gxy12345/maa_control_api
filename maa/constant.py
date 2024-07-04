@@ -18,6 +18,7 @@ TASK_TYPE_ENUM = [
     "LinkStart-ReclamationAlgorithm",
     "LinkStart-Recruiting",
     "Toolbox-GachaOnce",
+    "Toolbox-GachaTenTimes",
     "CaptureImageNow",
     "Settings-ConnectionAddress",
     "Settings-Stage1",
